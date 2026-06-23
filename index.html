@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Solomon Car Assistance – Soccorso Stradale Brescia 24/7. Recupero e trasporto auto, moto, SUV, furgoni." />
+  <title>Solomon Car Assistance – Soccorso Stradale Brescia 24/7</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a href="#home" class="header-logo">
+        <img src="logo.webp" alt="Solomon Car Assistance" class="logo-img" width="140" height="34" />
+      </a>
+      <nav class="nav" id="nav">
+        <ul>
+          <li><a href="#servizi">Servizi</a></li>
+          <li><a href="#galleria">Galleria</a></li>
+          <li><a href="#zone">Zona</a></li>
+          <li><a href="#posizione">Posizione</a></li>
+          <li><a href="#contatti">Contatti</a></li>
+        </ul>
+      </nav>
+      <a href="tel:+393395998469" class="header-phone">
+        <i class="fas fa-phone-alt"></i> +39 339 599 8469
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="hero-bg" id="heroBg" aria-hidden="true">
+      <div class="hero-bg-media">
+        <img
+          src="home.jpg"
+          alt="Flotta Solomon – carro attrezzi Iveco"
+          class="hero-bg-img"
+          id="heroBgImg"
+          width="1920"
+          height="1080"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </div>
+      <div class="hero-bg-mask"></div>
+    </div>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="hero-badge"><span class="hero-badge-dot"></span> Pronto intervento · Brescia</span>
+        <h1>
+          <span class="hero-line1">Sei in panne?</span>
+          <span class="hero-line2">Ti riportiamo in strada.</span>
+        </h1>
+        <p class="hero-desc">
+          Soccorso stradale attivo <strong>24 ore su 24</strong> a Brescia e in tutta la provincia.
+          Auto, moto, SUV e furgoni trasportati in totale sicurezza, da chi lo fa per mestiere.
+        </p>
+        <div class="hero-btns">
+          <a href="tel:+393395998469" class="btn-hero-primary">
+            <i class="fas fa-phone-alt"></i> Chiama ora
+          </a>
+          <a href="#posizione" class="btn-hero-ghost">
+            <i class="fas fa-location-crosshairs"></i> Invia la mia posizione
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section servizi" id="servizi">
+    <div class="container">
+      <div class="section-header">
+        <h2>I Nostri Servizi</h2>
+        <p>Soccorso stradale e carro attrezzi per ogni emergenza.</p>
+      </div>
+      <div class="servizi-grid">
+        <div class="servizio-card" data-animate>
+          <div class="card-icon"><i class="fas fa-car-crash"></i></div>
+          <h3>Soccorso Stradale</h3>
+          <p>Guasto, incidente o emergenza. Interveniamo subito, a qualsiasi ora.</p>
+        </div>
+        <div class="servizio-card" data-animate>
+          <div class="card-icon"><i class="fas fa-truck-moving"></i></div>
+          <h3>Carro Attrezzi</h3>
+          <p>Trasporto sicuro verso officina o destinazione a tua scelta.</p>
+        </div>
+        <div class="servizio-card" data-animate>
+          <div class="card-icon"><i class="fas fa-motorcycle"></i></div>
+          <h3>Recupero Moto</h3>
+          <p>Trasporto moto e scooter con attrezzatura dedicata.</p>
+        </div>
+        <div class="servizio-card" data-animate>
+          <div class="card-icon"><i class="fas fa-bolt"></i></div>
+          <h3>Batteria Scarica</h3>
+          <p>Avviamento e sostituzione batteria direttamente sul posto.</p>
+        </div>
+        <div class="servizio-card" data-animate>
+          <div class="card-icon"><i class="fas fa-key"></i></div>
+          <h3>Apertura Porte</h3>
+          <p>Apertura auto senza danni, intervento rapido.</p>
+        </div>
+        <div class="servizio-card" data-animate>
+          <div class="card-icon"><i class="fas fa-gas-pump"></i></div>
+          <h3>Rifornimento</h3>
+          <p>Carburante portato direttamente da te.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section perche" id="perche">
+    <div class="container perche-inner">
+      <div class="perche-text" data-animate>
+        <h2>Perché scegliere Solomon</h2>
+        <p>Quando sei fermo in strada, conti su un team che risponde subito.</p>
+        <ul class="perche-list">
+          <li><i class="fas fa-check"></i> Arrivo in <strong>30 minuti</strong> in città</li>
+          <li><i class="fas fa-check"></i> Operativi <strong>24/7</strong>, tutto l'anno</li>
+          <li><i class="fas fa-check"></i> Flotta moderna per ogni tipo di veicolo</li>
+          <li><i class="fas fa-check"></i> Prezzi chiari, senza sorprese</li>
+          <li><i class="fas fa-check"></i> Brescia, provincia e Lago di Garda</li>
+        </ul>
+        <a href="tel:+393395998469" class="btn btn-primary">
+          <i class="fas fa-phone-alt"></i> Contattaci
+        </a>
+      </div>
+      <div class="perche-image" data-animate>
+        <img src="unnamed (1).webp" alt="Carro attrezzi Solomon" width="800" height="600" loading="lazy" decoding="async" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section zone" id="zone">
+    <div class="container">
+      <div class="section-header section-header--light">
+        <h2>Zone di Intervento</h2>
+        <p>Copertura su Brescia città, provincia e Lago di Garda.</p>
+      </div>
+      <div class="zone-grid">
+        <div class="zona-card" data-animate>
+          <div class="zona-icon"><i class="fas fa-city"></i></div>
+          <h3>Brescia Città</h3>
+          <p>Centro, quartieri e zone industriali. Intervento in meno di 30 minuti.</p>
+        </div>
+        <div class="zona-card featured" data-animate>
+          <div class="zona-icon"><i class="fas fa-map"></i></div>
+          <h3>Brescia Provincia</h3>
+          <p>Val Trompia, Val Sabbia, Franciacorta e tutta l'area bresciana.</p>
+          <span class="zona-badge">Area principale</span>
+        </div>
+        <div class="zona-card" data-animate>
+          <div class="zona-icon"><i class="fas fa-water"></i></div>
+          <h3>Lago di Garda</h3>
+          <p>Desenzano, Sirmione, Salò e tutta la costa bresciana.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section galleria" id="galleria">
+    <div class="container">
+      <div class="section-header">
+        <h2>Galleria</h2>
+        <p>Alcuni dei nostri interventi sul campo.</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item" data-animate>
+          <img src="unnamed.webp" alt="Soccorso stradale Brescia" loading="lazy" decoding="async" />
+        </div>
+        <div class="gallery-item" data-animate>
+          <img src="unnamed (2).webp" alt="Carro attrezzi Brescia" loading="lazy" decoding="async" />
+        </div>
+        <div class="gallery-item" data-animate>
+          <img src="unnamed (3).webp" alt="Recupero auto Brescia" loading="lazy" decoding="async" />
+        </div>
+        <div class="gallery-item" data-animate>
+          <img src="unnamed (4).webp" alt="Trasporto veicoli" loading="lazy" decoding="async" />
+        </div>
+        <div class="gallery-item" data-animate>
+          <img src="unnamed (5).webp" alt="Assistenza Lago di Garda" loading="lazy" decoding="async" />
+        </div>
+        <div class="gallery-item" data-animate>
+          <img src="foto.webp" alt="Team Solomon" loading="lazy" decoding="async" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Chiudi"><i class="fas fa-times"></i></button>
+    <img src="" alt="" id="lightboxImg" />
+  </div>
+
+  <section class="section geo" id="posizione">
+    <div class="container">
+      <div class="section-header section-header--light">
+        <h2>Geolocalizzatore</h2>
+        <p>Trova la tua posizione e inviacela subito per un intervento più rapido.</p>
+      </div>
+      <div class="geo-panel" data-animate>
+        <div class="geo-map-wrap">
+          <div id="geoMap" class="geo-map" role="application" aria-label="Mappa della tua posizione"></div>
+        </div>
+        <div class="geo-side">
+          <div class="geo-status" id="geoStatus">
+            <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+            <p>Premi il pulsante per rilevare dove ti trovi. Servirà al nostro team per raggiungerti prima.</p>
+          </div>
+          <dl class="geo-details" id="geoDetails" hidden>
+            <div class="geo-detail-row">
+              <dt>Indirizzo</dt>
+              <dd id="geoAddress">—</dd>
+            </div>
+            <div class="geo-detail-row">
+              <dt>Coordinate</dt>
+              <dd id="geoCoords">—</dd>
+            </div>
+            <div class="geo-detail-row">
+              <dt>Precisione</dt>
+              <dd id="geoAccuracy">—</dd>
+            </div>
+          </dl>
+          <div class="geo-actions">
+            <button type="button" class="btn btn-geo-primary" id="geoLocateBtn">
+              <i class="fas fa-location-crosshairs"></i> Trova la mia posizione
+            </button>
+            <div class="geo-actions-secondary" id="geoShareActions" hidden>
+              <a href="#" class="btn btn-geo-wa" id="geoWhatsAppBtn" target="_blank" rel="noopener">
+                <i class="fab fa-whatsapp"></i> Invia su WhatsApp
+              </a>
+              <a href="#" class="btn btn-geo-maps" id="geoMapsBtn" target="_blank" rel="noopener">
+                <i class="fas fa-map"></i> Apri in Maps
+              </a>
+              <button type="button" class="btn btn-geo-ghost" id="geoCopyBtn">
+                <i class="fas fa-copy"></i> Copia posizione
+              </button>
+            </div>
+          </div>
+          <p class="geo-note" id="geoNote">
+            <i class="fas fa-shield-alt" aria-hidden="true"></i>
+            La posizione resta sul tuo dispositivo finché non la condividi con noi.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-final">
+    <div class="container cta-final-inner">
+      <div>
+        <h2>Sei in panne? Chiamaci subito.</h2>
+        <p>Disponibili giorno e notte, 365 giorni l'anno.</p>
+      </div>
+      <a href="tel:+393395998469" class="btn btn-white btn-lg">
+        <i class="fas fa-phone-alt"></i> 339 599 8469
+      </a>
+    </div>
+  </section>
+
+  <section class="section contatti" id="contatti">
+    <div class="container">
+      <div class="section-header">
+        <h2>Contatti</h2>
+        <p>Per emergenze o informazioni, siamo sempre raggiungibili.</p>
+      </div>
+      <div class="contatti-grid">
+        <div class="contatto-card" data-animate>
+          <div class="contatto-icon"><i class="fas fa-phone-alt"></i></div>
+          <h3>Telefono</h3>
+          <p>24 ore su 24</p>
+          <a href="tel:+393395998469" class="contatto-link">339 599 8469</a>
+        </div>
+        <div class="contatto-card" data-animate>
+          <div class="contatto-icon"><i class="fab fa-whatsapp"></i></div>
+          <h3>WhatsApp</h3>
+          <p>Messaggio rapido</p>
+          <a href="https://wa.me/393395998469" class="contatto-link" target="_blank" rel="noopener">Scrivici</a>
+        </div>
+        <div class="contatto-card" data-animate>
+          <div class="contatto-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <h3>Zona</h3>
+          <p>Brescia e provincia</p>
+          <span class="contatto-link">Lago di Garda</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="logo.webp" alt="Solomon Car Assistance" class="footer-logo" width="140" height="44" loading="lazy" />
+        <p>Soccorso stradale a Brescia e provincia. Operativi 24/7.</p>
+        <div class="footer-socials">
+          <a href="https://wa.me/393395998469" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Menu</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#servizi">Servizi</a></li>
+          <li><a href="#zone">Zone</a></li>
+          <li><a href="#posizione">Posizione</a></li>
+          <li><a href="#galleria">Galleria</a></li>
+          <li><a href="#contatti">Contatti</a></li>
+        </ul>
+      </div>
+      <div class="footer-services">
+        <h4>Servizi</h4>
+        <ul>
+          <li>Soccorso Stradale</li>
+          <li>Carro Attrezzi</li>
+          <li>Recupero Moto</li>
+          <li>Batteria Scarica</li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h4>Contatti</h4>
+        <a href="tel:+393395998469" class="footer-phone">
+          <i class="fas fa-phone-alt"></i> 339 599 8469
+        </a>
+        <p><i class="fas fa-map-marker-alt"></i> Brescia, Italia</p>
+        <p><i class="fas fa-clock"></i> Aperto 24/7</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2026 Solomon Car Assistance. Tutti i diritti riservati.</p>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/393395998469" class="floating-wa" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="script.js" defer></script>
+</body>
+</html>
