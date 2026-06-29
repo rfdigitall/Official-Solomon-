@@ -125,16 +125,10 @@
   /* ══ Header Apple-style: trasparente su hero, opaco su scroll ══ */
   const header = document.getElementById('header');
   if (header) {
-    const heroEl = document.getElementById('home');
-    let heroThreshold = window.innerHeight * 0.08;
-    const refreshHeroThreshold = () => {
-      heroThreshold = (heroEl ? heroEl.clientHeight : window.innerHeight) * 0.08;
-    };
+    const heroThreshold = 72;
     const onScroll = () => {
       header.classList.toggle('scrolled', window.scrollY > heroThreshold);
     };
-    refreshHeroThreshold();
-    window.addEventListener('resize', refreshHeroThreshold, { passive: true });
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
   }
@@ -204,21 +198,6 @@
     obs.observe(el);
   });
 
-  /* ══ Hero parallax ══ */
-  const hero = document.getElementById('home');
-  const heroBg = document.getElementById('heroBg');
-  if (hero && heroBg && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    let ticking = false;
-    const updateP = () => {
-      const r = hero.getBoundingClientRect();
-      if (r.bottom > 0 && r.top < window.innerHeight)
-        heroBg.style.setProperty('--hero-parallax', (-r.top * 0.18) + 'px');
-      ticking = false;
-    };
-    window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(updateP); } }, { passive: true });
-    updateP();
-  }
-
   /* ══ Gallery – mobile swipe dots ══ */
   const track = document.getElementById('galleryTrack');
   const dotsWrap = document.getElementById('galleryDots');
@@ -234,20 +213,31 @@
     });
     const dots = dotsWrap.querySelectorAll('.gallery-dot');
     let st;
+    let slideSpan = 0;
+    const refreshSlideSpan = () => {
+      const firstSlide = slides[0];
+      if (!firstSlide) {
+        slideSpan = 0;
+        return;
+      }
+      const gap = parseFloat(window.getComputedStyle(track).gap || '0');
+      slideSpan = firstSlide.clientWidth + gap;
+    };
+    refreshSlideSpan();
+    window.addEventListener('resize', refreshSlideSpan, { passive: true });
     track.addEventListener('scroll', () => {
       clearTimeout(st);
       st = setTimeout(() => {
-        const tl = track.getBoundingClientRect().left;
-        let ci = 0, md = Infinity;
-        slides.forEach((s, i) => { const d = Math.abs(s.getBoundingClientRect().left - tl); if (d < md) { md = d; ci = i; } });
+        const maxIndex = Math.max(slides.length - 1, 0);
+        const ci = slideSpan ? Math.min(maxIndex, Math.max(0, Math.round(track.scrollLeft / slideSpan))) : 0;
         dots.forEach((d, i) => d.classList.toggle('active', i === ci));
       }, 50);
     }, { passive: true });
     let isDown = false, sx, sl;
-    track.addEventListener('mousedown', e => { isDown = true; sx = e.pageX - track.offsetLeft; sl = track.scrollLeft; });
+    track.addEventListener('mousedown', e => { isDown = true; sx = e.clientX; sl = track.scrollLeft; });
     track.addEventListener('mouseleave', () => { isDown = false; });
     track.addEventListener('mouseup', () => { isDown = false; });
-    track.addEventListener('mousemove', e => { if (!isDown) return; e.preventDefault(); track.scrollLeft = sl - (e.pageX - track.offsetLeft - sx) * 1.2; });
+    track.addEventListener('mousemove', e => { if (!isDown) return; e.preventDefault(); track.scrollLeft = sl - (e.clientX - sx) * 1.2; });
   }
 
   /* ══ Gallery – desktop lightbox ══ */

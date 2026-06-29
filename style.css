@@ -147,9 +147,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   object-fit:cover;
   object-position:center 80%;
   opacity:1;
-  image-rendering:auto;
-  transform:translate3d(0,var(--hero-parallax,0px),0);
-  will-change:transform
+  image-rendering:auto
 }
 .hero-bg-mask{
   position:absolute;inset:0;
@@ -466,6 +464,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .gd-col{display:grid;gap:8px}
 .gd-item{position:relative;overflow:hidden;border-radius:var(--radius);background:#111;cursor:pointer;display:block}
 .gd-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.25,.46,.45,.94);display:block}
+.gallery-img-focus-top{object-position:center 34%}
 .gd-item:hover img{transform:scale(1.06)}
 .gd-item--xl{height:390px}
 .gd-row-big .gd-col .gd-item{height:191px}
@@ -766,6 +765,5 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   [data-animate]{opacity:1;transform:none;transition:none}
   .hero-badge,.hero h1,.hero-desc,.hero-btns{animation:none}
   .hero-badge-dot{animation:none}
-  .hero-bg-img{transform:none !important}
   .geo-map-overlay-inner i{animation:none}
 }
