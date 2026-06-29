@@ -3,6 +3,7 @@
 
   const WA_NUM = '393395998469';
   const WA_MSG_DEFAULT = 'Ciao%20Solomon%2C%20ho%20bisogno%20di%20soccorso%20stradale%20a%20Brescia.%20Potete%20intervenire%3F';
+  let leafletLoader = null;
 
 
   /* ══ Cookie Banner ══ */
@@ -27,13 +28,10 @@
   const hgInit     = document.getElementById('heroGeoInit');
   const hgLoading  = document.getElementById('heroGeoLoading');
   const hgFound    = document.getElementById('heroGeoFound');
-  const hgErr      = document.getElementById('heroGeoErr');
   const hgAddr     = document.getElementById('heroGeoAddr');
   const hgCoords   = document.getElementById('heroGeoCoords');
   const hgWaBtn    = document.getElementById('heroGeoWaBtn');
   const hgRetry    = document.getElementById('heroGeoRetry');
-  const hgRetryErr = document.getElementById('heroGeoRetryErr');
-  const hgErrMsg   = document.getElementById('heroGeoErrMsg');
 
   const WA_HERO = '393395998469';
 
@@ -53,17 +51,15 @@
   }
 
   function hgShow(state) {
-    // state: 'init' | 'loading' | 'found' | 'err'
+    // state: 'init' | 'loading' | 'found'
     if (hgInit)    hgInit.hidden    = (state !== 'init');
     if (hgLoading) hgLoading.hidden = (state !== 'loading');
     if (hgFound)   hgFound.hidden   = (state !== 'found');
-    if (hgErr)     hgErr.hidden     = (state !== 'err');
   }
 
   function hgLocate() {
     if (!navigator.geolocation) {
-      if (hgErrMsg) hgErrMsg.textContent = 'Il tuo browser non supporta la geolocalizzazione.';
-      hgShow('err'); return;
+      hgShow('init'); return;
     }
     hgShow('loading');
     navigator.geolocation.getCurrentPosition(
@@ -95,22 +91,13 @@
           if (hgAddr) hgAddr.textContent = 'Posizione rilevata';
         });
       },
-      err => {
-        const msgs = {
-          1: 'Permesso GPS negato. Vai nelle impostazioni del browser e attiva la posizione.',
-          2: 'Posizione non disponibile. Controlla il GPS del dispositivo.',
-          3: 'Tempo scaduto. Assicurati di avere il GPS attivo e riprova.'
-        };
-        if (hgErrMsg) hgErrMsg.textContent = msgs[err.code] || 'Impossibile rilevare la posizione.';
-        hgShow('err');
-      },
+      () => { hgShow('init'); },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
   }
 
   if (hgBtn)      hgBtn.addEventListener('click', hgLocate);
   if (hgRetry)    hgRetry.addEventListener('click', hgLocate);
-  if (hgRetryErr) hgRetryErr.addEventListener('click', hgLocate);
 
   /* ══ Privacy Modal ══ */
   const privacyModal = document.getElementById('privacyModal');
@@ -139,10 +126,15 @@
   const header = document.getElementById('header');
   if (header) {
     const heroEl = document.getElementById('home');
-    const onScroll = () => {
-      const heroH = heroEl ? heroEl.offsetHeight : window.innerHeight;
-      header.classList.toggle('scrolled', window.scrollY > heroH * 0.08);
+    let heroThreshold = window.innerHeight * 0.08;
+    const refreshHeroThreshold = () => {
+      heroThreshold = (heroEl ? heroEl.clientHeight : window.innerHeight) * 0.08;
     };
+    const onScroll = () => {
+      header.classList.toggle('scrolled', window.scrollY > heroThreshold);
+    };
+    refreshHeroThreshold();
+    window.addEventListener('resize', refreshHeroThreshold, { passive: true });
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
   }
@@ -264,11 +256,11 @@
   const lbClose = document.getElementById('lightboxClose');
   if (lightbox && lbImg) {
     // Desktop gallery items
-    document.querySelectorAll('.gallery-item, .gallery-slide').forEach(item => {
+    document.querySelectorAll('.gd-item, .gallery-slide').forEach(item => {
       item.addEventListener('click', () => {
         const img = item.querySelector('img');
         if (!img) return;
-        lbImg.src = img.src;
+        lbImg.src = img.dataset.full || img.currentSrc || img.src;
         lbImg.alt = img.alt;
         lightbox.classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -299,13 +291,44 @@
   const geoMapsBtn  = document.getElementById('geoMapsBtn');
   const geoCopyBtn  = document.getElementById('geoCopyBtn');
   const geoRetryBtn = document.getElementById('geoRetryBtn');
-  const geoRetryBtnErr=document.getElementById('geoRetryBtnErr');
-  const geoError    = document.getElementById('geoError');
-  const geoErrorMsg = document.getElementById('geoErrorMsg');
   const geoMapOverlay=document.getElementById('geoMapOverlay');
 
   const BRESCIA = [45.5416, 10.2118];
   let geoMap = null, userMarker = null, accCircle = null, currentPos = null;
+
+  function loadLeafletAssets() {
+    if (window.L) return Promise.resolve(window.L);
+    if (leafletLoader) return leafletLoader;
+
+    leafletLoader = new Promise((resolve, reject) => {
+      if (!document.querySelector('link[data-leaflet]')) {
+        const css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        css.crossOrigin = '';
+        css.dataset.leaflet = 'true';
+        document.head.appendChild(css);
+      }
+
+      const existing = document.querySelector('script[data-leaflet]');
+      if (existing) {
+        existing.addEventListener('load', () => resolve(window.L), { once: true });
+        existing.addEventListener('error', reject, { once: true });
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      script.crossOrigin = '';
+      script.defer = true;
+      script.dataset.leaflet = 'true';
+      script.onload = () => resolve(window.L);
+      script.onerror = reject;
+      document.body.appendChild(script);
+    });
+
+    return leafletLoader;
+  }
 
   function fmtCoords(lat, lng) { return lat.toFixed(5) + ', ' + lng.toFixed(5); }
   function mapsUrl(lat, lng)   { return 'https://www.google.com/maps?q=' + lat + ',' + lng; }
@@ -336,6 +359,8 @@
       if (userMarker) geoMap.removeLayer(userMarker);
       if (accCircle)  geoMap.removeLayer(accCircle);
       userMarker = L.marker([lat, lng], {
+        interactive: false,
+        keyboard: false,
         icon: L.divIcon({ className: 'geo-marker-user-wrap', html: '<span class="geo-marker-user"></span>', iconSize: [18, 18], iconAnchor: [9, 9] })
       }).addTo(geoMap);
       if (accuracy) {
@@ -350,7 +375,6 @@
     // Show result + send steps
     if (geoStepRes) geoStepRes.hidden = false;
     if (geoStepSend) geoStepSend.hidden = false;
-    if (geoError) geoError.hidden = true;
 
     // Set WA + Maps links immediately with coords
     if (geoWaBtn) geoWaBtn.href = buildWaUrl(lat, lng, '');
@@ -370,16 +394,10 @@
       });
   }
 
-  function showError(code) {
-    const msgs = {
-      1: 'Permesso negato. Attiva la posizione nelle impostazioni del browser.',
-      2: 'Posizione non disponibile. Controlla il GPS e riprova.',
-      3: 'Rilevamento scaduto. Riprova tra qualche secondo.'
-    };
-    if (geoErrorMsg) geoErrorMsg.textContent = msgs[code] || 'Impossibile rilevare la posizione.';
-    if (geoError) geoError.hidden = false;
+  function showError() {
     if (geoStepRes) geoStepRes.hidden = true;
     if (geoStepSend) geoStepSend.hidden = true;
+    if (geoMapOverlay) geoMapOverlay.classList.remove('hidden');
   }
 
   function setLocateBtnLoading(loading) {
@@ -396,11 +414,10 @@
 
   function locateUser() {
     if (!navigator.geolocation) {
-      showError(2);
+      showError();
       return;
     }
     setLocateBtnLoading(true);
-    if (geoError) geoError.hidden = true;
 
     navigator.geolocation.getCurrentPosition(
       pos => {
@@ -409,7 +426,7 @@
       },
       err => {
         setLocateBtnLoading(false);
-        showError(err.code);
+        showError();
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
     );
@@ -422,17 +439,25 @@
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(geoMap);
     L.marker(BRESCIA, {
+      interactive: false,
+      keyboard: false,
       icon: L.divIcon({ className: 'geo-marker-base-wrap', html: '<span class="geo-marker-base"></span>', iconSize: [12, 12], iconAnchor: [6, 6] })
     }).addTo(geoMap).bindPopup('<strong>Solomon Car Assistance</strong><br>Soccorso Stradale Brescia 24/7');
     setTimeout(() => geoMap.invalidateSize(), 100);
+    if (currentPos) showFound(currentPos.lat, currentPos.lng, currentPos.accuracy);
   }
 
   if (geoMapEl) {
-    initMap();
+    const ensureGeoMap = () => loadLeafletAssets().then(() => { initMap(); }).catch(() => {});
 
-    if (geoLocateBtn) geoLocateBtn.addEventListener('click', locateUser);
-    if (geoRetryBtn)  geoRetryBtn.addEventListener('click', locateUser);
-    if (geoRetryBtnErr) geoRetryBtnErr.addEventListener('click', locateUser);
+    if (geoLocateBtn) geoLocateBtn.addEventListener('click', () => {
+      ensureGeoMap();
+      locateUser();
+    });
+    if (geoRetryBtn)  geoRetryBtn.addEventListener('click', () => {
+      ensureGeoMap();
+      locateUser();
+    });
 
     if (geoCopyBtn) {
       geoCopyBtn.addEventListener('click', async () => {
@@ -453,9 +478,14 @@
     // Invalidate map when section enters viewport
     const geoSec = document.getElementById('posizione');
     if (geoSec) {
-      new IntersectionObserver(entries => {
-        entries.forEach(e => { if (e.isIntersecting) setTimeout(() => geoMap?.invalidateSize(), 150); });
-      }, { threshold: 0.2 }).observe(geoSec);
+      const geoObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          ensureGeoMap().then(() => setTimeout(() => geoMap?.invalidateSize(), 150));
+          geoObserver.disconnect();
+        });
+      }, { threshold: 0.2 });
+      geoObserver.observe(geoSec);
     }
   }
 
