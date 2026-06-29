@@ -162,6 +162,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     rgba(0,0,0,.97) 100%
   )
 }
+.hero-bg-mask::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,
+    rgba(0,0,0,0) 42%,
+    rgba(0,0,0,.10) 62%,
+    rgba(0,0,0,.18) 100%
+  );
+  pointer-events:none;
+}
 .hero-trucks-img{display:none}
 
 /* GRID: flex:1, spinge stats in fondo */
@@ -200,8 +211,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;padding:5px 14px;margin-bottom:14px;border:1px solid rgba(255,180,0,.42);border-radius:999px;font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--yellow);animation:fadeUp .6s ease .05s both}
 .hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--yellow);animation:dotPulse 2s ease infinite}
 .hero h1{font-family:"Arial Narrow","Segoe UI",Arial,sans-serif;font-weight:900;line-height:.92;margin-bottom:14px;text-transform:uppercase;animation:fadeUp .6s ease .15s both}
-.hero-line1{display:block;font-size:clamp(2.2rem,9vw,3rem);color:var(--white);letter-spacing:-.02em}
-.hero-line2{display:block;font-size:clamp(2.2rem,9vw,3rem);color:var(--yellow);letter-spacing:-.02em}
+.hero-line1{display:block;font-size:clamp(2.05rem,8.2vw,2.75rem);color:var(--white);letter-spacing:-.02em}
+.hero-line2{display:block;font-size:clamp(1.8rem,7.3vw,2.45rem);color:var(--yellow);letter-spacing:-.02em}
 .hero-desc{font-size:.9rem;line-height:1.6;color:rgba(255,255,255,.75);max-width:100%;margin-bottom:0;animation:fadeUp .6s ease .25s both}
 .hero-desc strong{color:var(--white);font-weight:600}
 .hero-btns{display:flex;flex-direction:column;gap:10px;align-items:stretch;animation:fadeUp .6s ease .35s both}
@@ -215,13 +226,17 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .btn-hero-primary,.btn-hero-wa{width:auto}
   .hero-stat-num{font-size:1.1rem}
 }
+@media(max-width:767px){
+  .hero-desc{display:none}
+}
 
 /* ── TABLET 768px ── */
 @media(min-width:768px){
   .hero-grid{justify-content:flex-end}
   .hero-top{padding:calc(var(--header-h) + 16px) 40px 0}
   .hero-bottom{padding:0 40px 40px}
-  .hero-line1,.hero-line2{font-size:clamp(2.6rem,5vw,3.8rem)}
+  .hero-line1{font-size:clamp(2.45rem,4.8vw,3.45rem)}
+  .hero-line2{font-size:clamp(2.15rem,4.1vw,3.05rem)}
   .hero-desc{font-size:1rem;max-width:520px}
   .hero-bg-img{object-position:center 80%}
   .hero-bg-mask{background:linear-gradient(180deg,rgba(0,0,0,.30) 0%,rgba(0,0,0,.10) 28%,rgba(0,0,0,.04) 52%,rgba(0,0,0,.58) 78%,rgba(0,0,0,.96) 100%)}
@@ -268,7 +283,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     gap:20px
   }
   .hero-bottom-badge{display:inline-flex !important}
-  .hero-line1,.hero-line2{font-size:clamp(3rem,4vw,4.4rem)}
+  .hero-line1{font-size:clamp(2.8rem,3.7vw,4rem)}
+  .hero-line2{font-size:clamp(2.4rem,3.15vw,3.35rem)}
   .hero-desc{font-size:1.05rem;max-width:460px;color:rgba(255,255,255,.82)}
   .btn-hero-primary{font-size:.88rem;padding:16px 28px}
   .btn-hero-wa{font-size:.92rem;padding:15px 24px}
@@ -281,7 +297,8 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 /* ── LARGE 1440px ── */
 @media(min-width:1440px){
   .hero-bottom{padding-left:110px;width:44%}
-  .hero-line1,.hero-line2{font-size:clamp(3.4rem,4vw,5rem)}
+  .hero-line1{font-size:clamp(3.1rem,3.8vw,4.5rem)}
+  .hero-line2{font-size:clamp(2.6rem,3.2vw,3.8rem)}
 }
 
 /* ── HERO GEO COMPACT ── */
@@ -650,6 +667,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .floating-wa{position:fixed;bottom:18px;right:16px;z-index:90;display:flex;align-items:center;gap:8px;padding:12px 18px 12px 14px;background:#0b6a38;color:#fff;border-radius:999px;font-size:1.3rem;box-shadow:0 4px 18px rgba(0,0,0,.22);transition:all .25s ease}
 .floating-wa-label{font-size:.8rem;font-weight:800;letter-spacing:.02em;color:#fff}
 .floating-wa:hover{transform:scale(1.06);box-shadow:0 6px 24px rgba(37,211,102,.48)}
+.floating-call{background:var(--yellow);color:var(--black);box-shadow:0 4px 18px rgba(255,180,0,.28)}
+.floating-call .floating-wa-label{color:var(--black)}
+.floating-call:hover{box-shadow:0 6px 24px rgba(255,180,0,.42)}
 
 /* ═══════════════ ANIMATIONS ═══════════════ */
 [data-animate]{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease}
