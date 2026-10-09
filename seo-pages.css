@@ -1,187 +1,109 @@
-/* Solomon landings locali — mobile call-first (stesso DNA del sito) */
-.seo-page{padding-bottom:88px;background:#fff}
-.seo-page .header{position:sticky;top:0;z-index:100;background:rgba(7,26,69,.97);backdrop-filter:blur(8px);box-shadow:0 2px 16px rgba(0,0,0,.25)}
-.seo-page .header .logo-name,.seo-page .header .logo-sub{color:#fff}
-.seo-page .header .nav a{color:rgba(255,255,255,.92)}
-.seo-page .header-phone{display:inline-flex !important}
-.seo-page .header-phone .phone-text{display:inline !important;font-size:.72rem}
-@media(max-width:380px){
-  .seo-page .header-phone .phone-text{font-size:.65rem}
-}
+/* Landings zona — stesso DNA della home (niente template SaaS) */
+.seo-page{padding-bottom:0}
 
-.seo-hero{
-  position:relative;
-  min-height:72vh;
-  display:flex;
-  align-items:flex-end;
-  color:#fff;
-  overflow:hidden;
-  background:#071a45;
-}
-.seo-hero-bg{
-  position:absolute;inset:0;
-  background:url("/carro-attrezzi-solomon-brescia-flotta-iveco-640.jpg") center top/cover no-repeat;
-  transform:scale(1.02);
+/* Header: stesso blur nero della home (niente blu “landing”) */
+.seo-page .header{background:rgba(0,0,0,.15)}
+.seo-page .header.scrolled{background:rgba(0,0,0,.92)}
+
+/* Hero: riusa classi .hero / .hero-line* / .btn-hero-* da style.css */
+.seo-page .hero{min-height:100svh}
+.seo-page .hero-bg{overflow:hidden}
+.seo-page .hero-bg-img{
+  width:100%;height:100%;object-fit:cover;
+  object-position:center top;transform:translateY(40px);
 }
 @media(min-width:769px){
-  .seo-hero-bg{
-    background-image:url("/carro-attrezzi-solomon-brescia-flotta-iveco.jpg");
-    background-position:right top;
-  }
+  .seo-page .hero-bg-img{object-position:right top;transform:translateY(70px)}
 }
-.seo-hero-mask{
-  position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(7,26,69,.35) 0%,rgba(7,26,69,.55) 40%,rgba(7,26,69,.92) 100%);
+.seo-page .hero-bottom{padding-bottom:28px}
+.seo-page .hero h1{
+  font-family:"Arial Narrow","Segoe UI",Arial,sans-serif;
+  font-weight:900;
+  line-height:.95;
+  text-transform:uppercase;
+  margin-bottom:12px;
 }
-.seo-hero-inner{
-  position:relative;z-index:2;
-  width:100%;
-  padding:24px 16px 28px;
-  max-width:1140px;
-  margin:0 auto;
+.seo-page .hero-desc{margin-bottom:16px;max-width:36rem}
+
+@media(min-width:769px){
+  .seo-page .hero{min-height:88vh}
+  .seo-page .hero-desc{display:block}
 }
-.seo-kicker{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
-  color:#ffb400;margin-bottom:10px;
-}
-.seo-kicker i{width:8px;height:8px;border-radius:50%;background:#ffb400;box-shadow:0 0 10px #ffb400}
-.seo-hero h1{
-  font-size:clamp(1.55rem,6.2vw,2.35rem);
-  line-height:1.12;
-  font-weight:800;
-  letter-spacing:-.02em;
-  margin:0 0 12px;
-  text-shadow:0 2px 18px rgba(0,0,0,.35);
-}
-.seo-hero-lead{
-  font-size:1rem;
-  line-height:1.45;
-  color:rgba(255,255,255,.92);
-  max-width:34rem;
-  margin:0 0 18px;
-}
-.seo-hero-actions{
-  display:flex;flex-direction:column;gap:10px;
-}
-.seo-hero-actions .btn-hero-primary,
-.seo-hero-actions .btn-hero-wa{
-  width:100%;
-  min-height:52px;
-  font-size:.95rem;
-  justify-content:center;
-}
-.seo-phone-xl{
-  display:block;
-  margin-top:14px;
-  text-align:center;
-  font-size:1.35rem;
-  font-weight:800;
-  color:#ffb400;
+
+/* Corpo testo — semplice, come sezioni home */
+.seo-main{padding:40px 0 20px;background:#fff}
+.seo-crumb{font-size:.78rem;color:#888;margin-bottom:22px}
+.seo-crumb a{color:var(--blue);font-weight:600}
+
+.seo-block{margin:0 0 28px}
+.seo-block h2{
+  font-family:"Arial Narrow","Segoe UI",Arial,sans-serif;
+  font-size:clamp(1.25rem,3.5vw,1.55rem);
+  font-weight:900;
+  text-transform:uppercase;
   letter-spacing:.02em;
-}
-.seo-phone-xl small{display:block;font-size:.75rem;font-weight:600;color:rgba(255,255,255,.7);margin-top:2px}
-
-@media(min-width:768px){
-  .seo-hero{min-height:58vh}
-  .seo-hero-inner{padding:40px 24px 44px}
-  .seo-hero-actions{flex-direction:row;flex-wrap:wrap}
-  .seo-hero-actions .btn-hero-primary,
-  .seo-hero-actions .btn-hero-wa{width:auto;min-width:220px}
-  .seo-phone-xl{text-align:left;font-size:1.5rem}
-}
-
-.seo-body{padding:28px 0 20px}
-.seo-crumb{font-size:.8rem;color:#777;margin-bottom:18px}
-.seo-crumb a{color:#0a2560}
-
-.seo-sec{margin:0 0 26px;padding:0}
-.seo-sec h2{
-  font-size:1.15rem;
-  color:#071a45;
+  color:var(--blue-dark);
   margin:0 0 8px;
-  font-weight:800;
+  line-height:1.15;
 }
-.seo-sec p{color:#333;line-height:1.55;margin:0 0 10px}
-.seo-check{list-style:none;padding:0;margin:12px 0 0}
-.seo-check li{
-  position:relative;
-  padding:8px 0 8px 28px;
-  border-bottom:1px solid #eef0f3;
-  color:#222;
-  font-size:.95rem;
-}
-.seo-check li::before{
-  content:"";
-  position:absolute;left:0;top:14px;
-  width:14px;height:14px;border-radius:50%;
-  background:#ffb400;
-  box-shadow:inset 0 0 0 3px #071a45;
-}
+.seo-block p{color:#444;line-height:1.65;margin:0;font-size:.95rem;max-width:40rem}
 
-.seo-mid-cta{
-  margin:28px 0;
-  padding:18px 16px;
-  border-radius:16px;
-  background:#071a45;
+.seo-points{list-style:none;padding:0;margin:8px 0 0}
+.seo-points li{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:9px 0;
+  border-bottom:1px solid var(--border);
+  color:#222;font-size:.94rem;
+}
+.seo-points li:last-child{border-bottom:0}
+.seo-points li i{color:var(--yellow);flex-shrink:0;margin-top:2px}
+
+/* CTA banda — come cta-finale home, non card arrotondate */
+.seo-band{
+  background:#0a0a0a;
   color:#fff;
+  padding:36px 0;
   text-align:center;
+  margin:8px 0 0;
 }
-.seo-mid-cta p{margin:0 0 12px;font-weight:700;font-size:1.05rem}
-.seo-mid-cta .btn-hero-primary{width:100%;min-height:52px;justify-content:center}
-@media(min-width:600px){
-  .seo-mid-cta .btn-hero-primary{width:auto;min-width:260px}
+.seo-band h2{
+  font-family:"Arial Narrow","Segoe UI",Arial,sans-serif;
+  font-weight:900;text-transform:uppercase;
+  font-size:clamp(1.35rem,4vw,1.85rem);
+  line-height:1.1;margin:0 0 8px;
 }
-
-.seo-faq details{
-  border:1px solid #e2e5ea;
-  border-radius:12px;
-  padding:12px 14px;
-  margin:0 0 10px;
-  background:#fafbfc;
-}
-.seo-faq summary{font-weight:700;color:#071a45;cursor:pointer}
-.seo-faq details p{margin:8px 0 0;color:#444}
-
-.seo-links{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px}
-.seo-links a{
-  display:block;
-  padding:12px 14px;
-  border-radius:12px;
-  background:#f4f6f8;
-  color:#0a2560;
-  font-weight:700;
-  font-size:.92rem;
+.seo-band p{color:rgba(255,255,255,.7);margin:0 0 18px;font-size:.95rem}
+.seo-band .hero-btns{
+  display:flex;flex-direction:column;gap:10px;
+  align-items:stretch;max-width:420px;margin:0 auto;
 }
 @media(min-width:600px){
-  .seo-links{grid-template-columns:1fr 1fr}
+  .seo-band .hero-btns{flex-direction:row;justify-content:center;max-width:none}
 }
 
-.seo-page .footer{background:#071a45;color:#fff;padding:28px 0 100px;margin-top:10px}
-.seo-page .footer a{color:#ffb400}
-.seo-page .footer-note{opacity:.75;font-size:.82rem;margin-top:8px}
+/* FAQ: riusa .faq-item da style.css */
+.seo-faq-wrap{background:var(--gray-bg);padding:40px 0}
+.seo-faq-wrap .section-header{margin-bottom:20px}
+.seo-faq-wrap .faq-grid{margin:0}
 
-/* Sticky call bar — sempre in basso su mobile */
-.seo-sticky{
-  position:fixed;left:0;right:0;bottom:0;z-index:200;
-  display:grid;grid-template-columns:1.15fr .85fr;
-  gap:0;
-  padding:0;
-  background:#fff;
-  box-shadow:0 -6px 24px rgba(0,0,0,.18);
-  border-top:1px solid #e8eaee;
+/* Link zone — lista testo, non pillole */
+.seo-more{padding:36px 0 48px}
+.seo-more h2{
+  font-family:"Arial Narrow","Segoe UI",Arial,sans-serif;
+  font-weight:900;text-transform:uppercase;
+  font-size:1.25rem;color:var(--blue-dark);margin:0 0 12px;
 }
-.seo-sticky a{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  min-height:58px;
-  font-weight:800;
-  font-size:.95rem;
-  text-decoration:none;
+.seo-more ul{list-style:none;padding:0;margin:0;display:grid;gap:0;grid-template-columns:1fr}
+.seo-more li{border-bottom:1px solid var(--border)}
+.seo-more a{
+  display:block;padding:12px 0;
+  color:var(--blue);font-weight:700;font-size:.92rem;
 }
-.seo-sticky-call{background:#ffb400;color:#000}
-.seo-sticky-wa{background:#25d366;color:#fff}
-@media(min-width:900px){
-  .seo-sticky{display:none}
-  .seo-page{padding-bottom:0}
-  .seo-page .footer{padding-bottom:28px}
+.seo-more a:hover{color:var(--yellow)}
+.seo-more .seo-addr{margin-top:16px;font-size:.82rem;color:#888}
+@media(min-width:600px){
+  .seo-more ul{grid-template-columns:1fr 1fr;gap:0 28px}
 }
+
+/* Footer landings: stesso footer home, padding ok con floating call */
+.seo-page .floating-call{bottom:18px}
