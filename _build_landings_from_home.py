@@ -502,7 +502,7 @@ PAGES = [
   {
     "slug": "soccorso-stradale-sarezzo",
     "title": "Soccorso Stradale Sarezzo | Carro Attrezzi Val Trompia",
-    "desc": "Soccorso stradale a Sarezzo H24. Panne e traino. 339 599 8469.",
+    "desc": "Soccorso stradale a Sarezzo H24: panne, batteria, apertura porte e carro attrezzi in Val Trompia. Chiama 339 599 8469.",
     "kws": "soccorso stradale Sarezzo, carro attrezzi Sarezzo, pronto intervento Sarezzo",
     "place": "Sarezzo",
     "badge": "Sarezzo · Val Trompia 24/7",
