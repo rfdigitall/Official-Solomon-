@@ -1361,11 +1361,9 @@ def build_page(index: str, p: dict) -> str:
       <ul>
         <li><a href="/">Home</a></li>
         <li><a href="#servizi">Servizi</a></li>
-        <li><a href="#zone">Zone</a></li>
         <li><a href="#faq">FAQ</a></li>
         <li><a href="#posizione">Posizione</a></li>
         <li><a href="#contatti">Contatti</a></li>
-        <li><a href="/zone-brescia.html">Tutte le zone</a></li>
       </ul>
     </nav>""",
         1,
@@ -1502,14 +1500,17 @@ def build_page(index: str, p: dict) -> str:
     # Cache bust note on css already exists
     html = html.replace("style.css?v=20261009seo", "style.css?v=20261009home", 1)
 
-    # Mesh link interni (SEO) — stesso stile scuro della sezione zone
-    related = "\n    " + render_related(p["slug"]) + "\n"
-    if 'id="zone"' in html and "seo-related" not in html:
-        html = html.replace(
-            '  </div>\n</section>\n\n<!-- GALLERIA',
-            f"  </div>{related}</section>\n\n<!-- GALLERIA",
-            1,
-        )
+    # Rimuovi intera sezione ZONE (card + nap + link SEO) — non piace sul design
+    html = re.sub(
+        r'\s*<!-- ZONE -->\s*<section class="section zone"[^>]*>.*?</section>\s*(?=<!-- GALLERIA)',
+        "\n\n",
+        html,
+        count=1,
+        flags=re.S,
+    )
+    # safety: togli eventuali blocchi link SEO residui
+    html = re.sub(r'\s*<div class="seo-related"[^>]*>.*?</div>\s*', "\n", html, flags=re.S)
+    html = re.sub(r'\s*<div class="seo-hub-home"[^>]*>.*?</div>\s*', "\n", html, flags=re.S)
 
     return html
 
@@ -1532,51 +1533,25 @@ def write_sitemap(slugs: list[str]) -> None:
     )
 
 
-def patch_home_links(index: str, slugs: list[str]) -> str:
-    """Link zone nella home: stesso stile lista, dentro zone section — design nativo."""
-    if "seo-hub-home" in index:
-        return index
-    links = [
-        ("soccorso-stradale-brescia", "Soccorso stradale Brescia"),
-        ("carro-attrezzi-brescia", "Carro attrezzi Brescia"),
-        ("soccorso-stradale-val-trompia", "Val Trompia"),
-        ("soccorso-stradale-franciacorta", "Franciacorta"),
-        ("soccorso-stradale-desenzano", "Desenzano"),
-        ("soccorso-stradale-lago-di-garda", "Lago di Garda"),
-        ("batteria-auto-scarica-brescia", "Batteria scarica"),
-        ("zone-brescia", "Tutte le zone"),
-    ]
-    lis = "".join(
-        f'<li><a href="/{s}.html" style="color:#ffb400">{lab}</a></li>' for s, lab in links if s in slugs or True
-    )
-    block = f"""
-    <div class="seo-hub-home" style="margin-top:22px;text-align:center">
-      <p style="color:rgba(255,255,255,.75);margin-bottom:10px;font-size:.9rem">Pagine zona</p>
-      <ul style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px 18px;list-style:none;padding:0;margin:0">{lis}</ul>
-    </div>
-"""
-    return index.replace(
-        '    <div class="nap-block">',
-        block + '    <div class="nap-block">',
-        1,
-    )
+def clean_home(index: str) -> str:
+    """Togli lista SEO 'Pagine zona' — resta solo il blocco zone originale della home."""
+    return re.sub(r'\s*<div class="seo-hub-home"[^>]*>.*?</div>\s*', "\n", index, flags=re.S)
 
 
 def main() -> None:
     index_path = ROOT / "index.html"
-    index = index_path.read_text(encoding="utf-8")
+    raw = index_path.read_text(encoding="utf-8")
+    index = clean_home(raw)
+    if index != raw:
+        print("home: removed Pagine zona hub")
+    index_path.write_text(index, encoding="utf-8")
     slugs = []
     for p in PAGES:
         out = build_page(index, p)
         (ROOT / f"{p['slug']}.html").write_text(out, encoding="utf-8")
         slugs.append(p["slug"])
-        print("ok", p["slug"], "chars", len(out))
+        print("ok", p["slug"], "no-zone", "zone" not in out[out.find("<!-- PERCHÉ"):out.find("<!-- GALLERIA")] if "<!-- PERCHÉ" in out else "n/a")
     write_sitemap(slugs)
-    # patch home once
-    home = patch_home_links(index, slugs)
-    if home != index:
-        index_path.write_text(home, encoding="utf-8")
-        print("home links patched")
     print("DONE", len(slugs))
 
 
