@@ -1461,13 +1461,15 @@ def build_page(index: str, p: dict) -> str:
         count=1,
         flags=re.S,
     )
-    html = re.sub(
-        r'<div class="zone-grid">.*?</div>\s*\n    <div class="nap-block">',
-        f'<div class="zone-grid">\n{render_zones(p["zones"])}\n    </div>\n    <div class="nap-block">',
-        html,
-        count=1,
-        flags=re.S,
-    )
+    # zone-grid: NON usare regex non-greedy (si ferma al primo </div> interno)
+    zg = html.find('<div class="zone-grid">')
+    nap = html.find('<div class="nap-block">', zg if zg >= 0 else 0)
+    if zg >= 0 and nap > zg:
+        html = (
+            html[:zg]
+            + f'<div class="zone-grid">\n{render_zones(p["zones"])}\n    </div>\n    '
+            + html[nap:]
+        )
     html = re.sub(
         r'(<strong>Solomon Car Assistance</strong> – ).*?(<span class="nap-sep">)',
         rf'\1{p["nap"]} \2',
