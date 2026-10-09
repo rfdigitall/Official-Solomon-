@@ -890,6 +890,250 @@ def wa(place: str, extra: str = "Potete intervenire?") -> str:
     return f"https://wa.me/393395998469?text={quote(f'Ciao Solomon, sono in panne a {place}. {extra}')}"
 
 
+def enrich_faq(place: str, faq: list[tuple[str, str]], slug: str) -> list[tuple[str, str]]:
+    """FAQ orientate a ricerche di urgenza locali (numero, H24, costo, carro)."""
+    out = list(faq)
+    existing_l = " ".join(q.lower() for q, _ in out)
+
+    must = []
+    # Sempre una FAQ “numero + soccorso stradale + luogo” (query tipica di urgenza)
+    if "numero del soccorso" not in existing_l and "numero per il soccorso" not in existing_l:
+        must.append(
+            (
+                f"Qual è il numero del soccorso stradale a {place}?",
+                f"Il numero diretto di Solomon Car Assistance è {TEL} (anche WhatsApp), attivo 24/7 per interventi a {place}.",
+            )
+        )
+    if "notte" not in existing_l and "24" not in existing_l and "festiv" not in existing_l:
+        must.append(
+            (
+                f"Il soccorso stradale a {place} è attivo di notte?",
+                f"Sì: operativi 24 ore su 24, 7 giorni su 7, anche festivi, a {place} e nei comuni collegati.",
+            )
+        )
+    if "cost" not in existing_l and "prezz" not in existing_l:
+        must.append(
+            (
+                f"Quanto costa il soccorso stradale / carro attrezzi a {place}?",
+                "Dipende da tipo di intervento e distanza. Al telefono ti diamo un'indicazione chiara prima di partire, quando possibile.",
+            )
+        )
+    if "carro" in slug and "carro" not in existing_l:
+        must.append(
+            (
+                f"Come richiedo un carro attrezzi a {place}?",
+                f"Chiama o scrivi al {TEL}: diciamo dove sei, dove portare il veicolo e partiamo con il pianale.",
+            )
+        )
+    if "batteria" in slug and "avviamento" not in existing_l:
+        must.append(
+            (
+                f"Fate avviamento batteria a {place} senza traino?",
+                "Sì, quando possibile partiamo per avviamento sul posto: spesso eviti il carro attrezzi.",
+            )
+        )
+    if "apertura" in slug and "chiav" not in existing_l:
+        must.append(
+            (
+                f"Aprite l'auto se ho lasciato le chiavi dentro a {place}?",
+                "Sì: apertura professionale, con attenzione a non danneggiare portiere e serrature quando fattibile.",
+            )
+        )
+    # urgenza generica se manca
+    if "pronto intervento" not in existing_l and "panne" not in existing_l:
+        must.append(
+            (
+                f"Fate pronto intervento se l'auto è in panne a {place}?",
+                f"Sì: pronto intervento H24 a {place}. Chiama {TEL} e, se puoi, invia la posizione WhatsApp.",
+            )
+        )
+
+    # prepend must (high-intent) then unique body FAQ
+    merged = must + out
+    seen = set()
+    final = []
+    for q, a in merged:
+        k = q.lower().strip()
+        if k in seen:
+            continue
+        seen.add(k)
+        final.append((q, a))
+    return final[:8]  # max 8 FAQ (schema + UX)
+
+
+# Mesh link: slug -> label (pagine correlate)
+LINK_MESH = {
+    "soccorso-stradale-brescia": [
+        ("carro-attrezzi-brescia", "Carro attrezzi Brescia"),
+        ("soccorso-stradale-val-trompia", "Soccorso Val Trompia"),
+        ("soccorso-stradale-franciacorta", "Soccorso Franciacorta"),
+        ("batteria-auto-scarica-brescia", "Batteria scarica"),
+        ("zone-brescia", "Tutte le zone"),
+    ],
+    "carro-attrezzi-brescia": [
+        ("soccorso-stradale-brescia", "Soccorso stradale Brescia"),
+        ("carro-attrezzi-val-trompia", "Carro Val Trompia"),
+        ("carro-attrezzi-franciacorta", "Carro Franciacorta"),
+        ("recupero-auto-epoca-brescia", "Auto d'epoca"),
+        ("zone-brescia", "Tutte le zone"),
+    ],
+    "soccorso-stradale-val-trompia": [
+        ("carro-attrezzi-val-trompia", "Carro attrezzi Val Trompia"),
+        ("soccorso-stradale-gardone-valtrompia", "Gardone V.T."),
+        ("soccorso-stradale-lumezzane", "Lumezzane"),
+        ("soccorso-stradale-sarezzo", "Sarezzo"),
+        ("soccorso-stradale-brescia", "Brescia città"),
+    ],
+    "carro-attrezzi-val-trompia": [
+        ("soccorso-stradale-val-trompia", "Soccorso Val Trompia"),
+        ("soccorso-stradale-lumezzane", "Lumezzane"),
+        ("soccorso-stradale-gardone-valtrompia", "Gardone V.T."),
+        ("carro-attrezzi-brescia", "Carro Brescia"),
+    ],
+    "soccorso-stradale-franciacorta": [
+        ("carro-attrezzi-franciacorta", "Carro Franciacorta"),
+        ("soccorso-stradale-rovato", "Rovato"),
+        ("soccorso-stradale-brescia", "Brescia"),
+        ("zone-brescia", "Tutte le zone"),
+    ],
+    "carro-attrezzi-franciacorta": [
+        ("soccorso-stradale-franciacorta", "Soccorso Franciacorta"),
+        ("soccorso-stradale-rovato", "Rovato"),
+        ("carro-attrezzi-brescia", "Carro Brescia"),
+    ],
+    "soccorso-stradale-desenzano": [
+        ("soccorso-stradale-lago-di-garda", "Lago di Garda"),
+        ("soccorso-stradale-sirmione", "Sirmione"),
+        ("soccorso-stradale-salo", "Salò"),
+        ("carro-attrezzi-brescia", "Carro attrezzi"),
+    ],
+    "soccorso-stradale-lago-di-garda": [
+        ("soccorso-stradale-desenzano", "Desenzano"),
+        ("soccorso-stradale-sirmione", "Sirmione"),
+        ("soccorso-stradale-salo", "Salò"),
+        ("zone-brescia", "Tutte le zone"),
+    ],
+    "soccorso-stradale-gardone-valtrompia": [
+        ("soccorso-stradale-val-trompia", "Val Trompia"),
+        ("soccorso-stradale-lumezzane", "Lumezzane"),
+        ("soccorso-stradale-sarezzo", "Sarezzo"),
+    ],
+    "soccorso-stradale-lumezzane": [
+        ("soccorso-stradale-val-trompia", "Val Trompia"),
+        ("soccorso-stradale-gardone-valtrompia", "Gardone V.T."),
+        ("carro-attrezzi-val-trompia", "Carro Val Trompia"),
+    ],
+    "soccorso-stradale-sarezzo": [
+        ("soccorso-stradale-val-trompia", "Val Trompia"),
+        ("soccorso-stradale-lumezzane", "Lumezzane"),
+        ("soccorso-stradale-gardone-valtrompia", "Gardone"),
+    ],
+    "soccorso-stradale-rovato": [
+        ("soccorso-stradale-franciacorta", "Franciacorta"),
+        ("carro-attrezzi-franciacorta", "Carro Franciacorta"),
+        ("soccorso-stradale-brescia", "Brescia"),
+    ],
+    "soccorso-stradale-sirmione": [
+        ("soccorso-stradale-desenzano", "Desenzano"),
+        ("soccorso-stradale-lago-di-garda", "Lago di Garda"),
+        ("soccorso-stradale-salo", "Salò"),
+    ],
+    "soccorso-stradale-salo": [
+        ("soccorso-stradale-lago-di-garda", "Lago di Garda"),
+        ("soccorso-stradale-desenzano", "Desenzano"),
+        ("soccorso-stradale-sirmione", "Sirmione"),
+    ],
+    "batteria-auto-scarica-brescia": [
+        ("soccorso-stradale-brescia", "Soccorso Brescia"),
+        ("apertura-porte-auto-brescia", "Apertura porte"),
+        ("carro-attrezzi-brescia", "Carro attrezzi"),
+    ],
+    "apertura-porte-auto-brescia": [
+        ("soccorso-stradale-brescia", "Soccorso Brescia"),
+        ("batteria-auto-scarica-brescia", "Batteria scarica"),
+        ("zone-brescia", "Zone"),
+    ],
+    "recupero-auto-epoca-brescia": [
+        ("carro-attrezzi-brescia", "Carro attrezzi"),
+        ("soccorso-stradale-brescia", "Soccorso Brescia"),
+        ("zone-brescia", "Zone"),
+    ],
+    "zone-brescia": [
+        ("soccorso-stradale-brescia", "Soccorso Brescia"),
+        ("soccorso-stradale-val-trompia", "Val Trompia"),
+        ("soccorso-stradale-franciacorta", "Franciacorta"),
+        ("soccorso-stradale-lago-di-garda", "Lago di Garda"),
+        ("carro-attrezzi-brescia", "Carro attrezzi"),
+    ],
+}
+
+
+def render_related(slug: str) -> str:
+    links = LINK_MESH.get(slug, [("zone-brescia", "Tutte le zone"), ("", "Home")])
+    lis = []
+    for s, lab in links:
+        href = f"/{s}.html" if s else "/"
+        lis.append(f'<li><a href="{href}" style="color:#ffb400">{lab}</a></li>')
+    return (
+        '<div class="seo-related" style="margin-top:20px;text-align:center">'
+        '<p style="color:rgba(255,255,255,.7);margin-bottom:8px;font-size:.88rem">Pagine collegate</p>'
+        f'<ul style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;list-style:none;padding:0;margin:0">{"".join(lis)}</ul>'
+        "</div>"
+    )
+
+
+def page_service_schema(p: dict, url: str) -> dict:
+    return {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": f"{p['h1a']} {p['h1b']}".strip(),
+        "serviceType": "Soccorso Stradale / Carro Attrezzi",
+        "description": p["desc"],
+        "url": url,
+        "provider": {"@id": f"{BASE}/#organization"},
+        "areaServed": {"@type": "Place", "name": p["place"]},
+        "availableChannel": {
+            "@type": "ServiceChannel",
+            "servicePhone": {
+                "@type": "ContactPoint",
+                "telephone": TEL_E,
+                "contactType": "customer service",
+                "areaServed": p["place"],
+                "availableLanguage": ["Italian"],
+                "hoursAvailable": "Mo-Su 00:00-23:59",
+            },
+        },
+        "offers": {
+            "@type": "Offer",
+            "availability": "https://schema.org/InStock",
+            "priceCurrency": "EUR",
+        },
+    }
+
+
+def page_emergency_schema(p: dict) -> dict:
+    return {
+        "@context": "https://schema.org",
+        "@type": "EmergencyService",
+        "@id": f"{BASE}/{p['slug']}.html#emergency",
+        "name": f"Solomon Car Assistance – {p['nap']}",
+        "telephone": TEL_E,
+        "openingHours": "Mo-Su 00:00-23:59",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Via Pietro Tamburini 51",
+            "addressLocality": "Brescia",
+            "addressRegion": "Lombardia",
+            "postalCode": "25136",
+            "addressCountry": "IT",
+        },
+        "geo": {"@type": "GeoCoordinates", "latitude": 45.5784035, "longitude": 10.2310602},
+        "areaServed": p["place"],
+        "availableLanguage": "Italian",
+        "url": f"{BASE}/{p['slug']}.html",
+    }
+
+
 def render_servizi(cards: list[tuple[str, str]]) -> str:
     icons = [
         "fa-car-crash",
@@ -953,8 +1197,17 @@ def render_perche(items: list[str]) -> str:
 
 def build_page(index: str, p: dict) -> str:
     html = index
+    # togli blocco link home (se presente) — le landings usano mesh propria
+    html = re.sub(
+        r'\s*<div class="seo-hub-home"[^>]*>.*?</div>\s*',
+        "\n",
+        html,
+        count=1,
+        flags=re.S,
+    )
     url = f"{BASE}/{p['slug']}.html"
     w = wa(p["place"])
+    faq = enrich_faq(p["place"], p["faq"], p["slug"])
 
     # Head essentials
     html = re.sub(r"<title>.*?</title>", f"<title>{p['title']}</title>", html, count=1, flags=re.S)
@@ -1025,7 +1278,7 @@ def build_page(index: str, p: dict) -> str:
         count=1,
     )
 
-    # FAQ schema replace
+    # FAQ schema (enriched, urgenza locale)
     faq_ld = {
         "@context": "https://schema.org",
         "@type": "FAQPage",
@@ -1035,7 +1288,7 @@ def build_page(index: str, p: dict) -> str:
                 "name": q,
                 "acceptedAnswer": {"@type": "Answer", "text": re.sub(r"<[^>]+>", "", a)},
             }
-            for q, a in p["faq"]
+            for q, a in faq
         ],
     }
     html = re.sub(
@@ -1051,12 +1304,35 @@ def build_page(index: str, p: dict) -> str:
         "@type": "BreadcrumbList",
         "itemListElement": [
             {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{BASE}/"},
-            {"@type": "ListItem", "position": 2, "name": p["place"], "item": url},
+            {"@type": "ListItem", "position": 2, "name": "Zone", "item": f"{BASE}/zone-brescia.html"},
+            {"@type": "ListItem", "position": 3, "name": p["place"], "item": url},
         ],
     }
     html = re.sub(
         r'<script type="application/ld\+json">\{"@context":"https://schema\.org","@type":"BreadcrumbList".*?</script>',
         f'<script type="application/ld+json">{json.dumps(crumb_ld, ensure_ascii=False)}</script>',
+        html,
+        count=1,
+        flags=re.S,
+    )
+
+    # Service schema → specifico per pagina (non restare su “Brescia” generico)
+    svc = page_service_schema(p, url)
+    html = re.sub(
+        r'<!-- SCHEMA: Service – Pronto Intervento -->\s*<script type="application/ld\+json">.*?</script>',
+        "<!-- SCHEMA: Service – pagina locale -->\n  "
+        f'<script type="application/ld+json">{json.dumps(svc, ensure_ascii=False)}</script>',
+        html,
+        count=1,
+        flags=re.S,
+    )
+
+    # EmergencyService → areaServed della pagina
+    em = page_emergency_schema(p)
+    html = re.sub(
+        r'<!-- SCHEMA: Vehicle/Service equipment -->\s*<script type="application/ld\+json">\s*\{[^}]*"@type":\s*"EmergencyService".*?</script>',
+        "<!-- SCHEMA: EmergencyService locale -->\n  "
+        f'<script type="application/ld+json">{json.dumps(em, ensure_ascii=False)}</script>',
         html,
         count=1,
         flags=re.S,
@@ -1203,7 +1479,7 @@ def build_page(index: str, p: dict) -> str:
     # FAQ
     html = re.sub(
         r'<div class="faq-grid">.*?</div>\s*</div>\s*</section>\s*\n\n<!-- GEOLOCALIZZATORE -->',
-        f'<div class="faq-grid">\n{render_faq(p["faq"])}\n    </div>\n  </div>\n</section>\n\n<!-- GEOLOCALIZZATORE -->',
+        f'<div class="faq-grid">\n{render_faq(faq)}\n    </div>\n  </div>\n</section>\n\n<!-- GEOLOCALIZZATORE -->',
         html,
         count=1,
         flags=re.S,
@@ -1224,16 +1500,12 @@ def build_page(index: str, p: dict) -> str:
     # Cache bust note on css already exists
     html = html.replace("style.css?v=20261009seo", "style.css?v=20261009home", 1)
 
-    # Internal hub link after zone nap (same design, subtle)
-    hub = (
-        f'\n    <p style="text-align:center;margin-top:18px">'
-        f'<a href="/zone-brescia.html" style="color:#ffb400;font-weight:700">Tutte le zone di intervento →</a>'
-        f' · <a href="/" style="color:#ffb400;font-weight:700">Home</a></p>\n'
-    )
-    if 'id="zone"' in html and "Tutte le zone di intervento" not in html:
+    # Mesh link interni (SEO) — stesso stile scuro della sezione zone
+    related = "\n    " + render_related(p["slug"]) + "\n"
+    if 'id="zone"' in html and "seo-related" not in html:
         html = html.replace(
             '  </div>\n</section>\n\n<!-- GALLERIA',
-            f"  </div>{hub}</section>\n\n<!-- GALLERIA",
+            f"  </div>{related}</section>\n\n<!-- GALLERIA",
             1,
         )
 
