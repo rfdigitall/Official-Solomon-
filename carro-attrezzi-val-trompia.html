@@ -76,24 +76,24 @@
 
   <!-- Preload hero image for LCP performance -->
   <link rel="preload" as="image" href="carro-attrezzi-solomon-brescia-flotta-iveco.jpg" imagesrcset="carro-attrezzi-solomon-brescia-flotta-iveco-640.jpg 640w, carro-attrezzi-solomon-brescia-flotta-iveco.jpg 1024w" imagesizes="100vw" type="image/jpeg" fetchpriority="high"/>
-  <link rel="stylesheet" href="style.css?v=20261009home"/>
+  <link rel="stylesheet" href="style.css?v=20261009fixscroll"/>
   <style>
+    /* Framing hero fără translateY (transform pe img = jitter la scroll pe mobile) */
     #home .hero-bg { overflow: hidden !important; }
     #home .hero-bg-img {
       width: 100% !important;
       height: 100% !important;
       object-fit: cover !important;
+      transform: none !important;
     }
     @media (min-width: 769px) {
       #home .hero-bg-img {
-        object-position: right top !important;
-        transform: translateY(70px) !important;
+        object-position: right 18% !important;
       }
     }
     @media (max-width: 768px) {
       #home .hero-bg-img {
-        object-position: center top !important;
-        transform: translateY(40px) !important;
+        object-position: center 28% !important;
       }
     }
   </style>
@@ -792,6 +792,6 @@
   <i class="fas fa-phone-alt"></i><span class="floating-wa-label">Chiama</span>
 </a>
 
-<script src="script.js?v=2606292642" defer></script>
+<script src="script.js?v=20261009fixscroll" defer></script>
 </body>
 </html>

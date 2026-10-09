@@ -126,11 +126,32 @@
   const header = document.getElementById('header');
   if (header) {
     const heroThreshold = 72;
+    let headerTicking = false;
     const onScroll = () => {
-      header.classList.toggle('scrolled', window.scrollY > heroThreshold);
+      if (headerTicking) return;
+      headerTicking = true;
+      requestAnimationFrame(() => {
+        header.classList.toggle('scrolled', window.scrollY > heroThreshold);
+        headerTicking = false;
+      });
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+  }
+
+  /* ══ Lock hero height once (iOS URL-bar resize = no reflow / no image shake) ══ */
+  const heroEl = document.querySelector('.hero');
+  if (heroEl && window.matchMedia('(max-width: 768px)').matches) {
+    const lockHeroH = () => {
+      const h = Math.round(window.visualViewport ? window.visualViewport.height : window.innerHeight);
+      if (h > 200) {
+        heroEl.style.height = h + 'px';
+        heroEl.style.maxHeight = h + 'px';
+      }
+    };
+    lockHeroH();
+    // only re-lock on real orientation change, not toolbar show/hide
+    window.addEventListener('orientationchange', () => setTimeout(lockHeroH, 250), { passive: true });
   }
 
   /* ══ Hamburger ══ */

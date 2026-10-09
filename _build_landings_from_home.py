@@ -1498,7 +1498,7 @@ def build_page(index: str, p: dict) -> str:
     html = html.replace('<li><a href="#home">Home</a></li>', '<li><a href="/">Home</a></li>', 1)
 
     # Cache bust note on css already exists
-    html = html.replace("style.css?v=20261009seo", "style.css?v=20261009home", 1)
+    html = html.replace("style.css?v=20261009fixscroll", "style.css?v=20261009fixscroll", 1)
 
     # Rimuovi intera sezione ZONE (card + nap + link SEO) — non piace sul design
     html = re.sub(

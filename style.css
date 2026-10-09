@@ -12,8 +12,11 @@
   --transition:.22s ease;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:16px;line-height:1.65;color:#1e1e1e;background:var(--white);overflow-x:hidden}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
+body{font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:16px;line-height:1.65;color:#1e1e1e;background:var(--white);overflow-x:clip}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+}
 img{max-width:100%;height:auto;display:block}
 a{text-decoration:none;color:inherit}
 ul{list-style:none}
@@ -133,21 +136,27 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 /* ═══════════════ HERO ═══════════════ */
 .hero{
   position:relative;
-  height:100dvh;
+  /* svh = viewport stabilă pe mobile (bara URL nu redimensionează → fără tremur) */
+  height:100vh;
+  height:100svh;
+  max-height:100svh;
   background:#0d0d0d;
   display:flex;flex-direction:column;
-  overflow:visible
+  overflow:hidden
 }
-.hero-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;transform:translateZ(0)}
 .hero-bg-media{position:absolute;inset:0;background:#0d0d0d}
 
-/* BASE (mobile): cover leggero, camion al centro */
+/* BASE (mobile): cover, fără transform pe scroll (cauză tipică de jitter iOS) */
 .hero-bg-img{
   display:block;width:100%;height:100%;
   object-fit:cover;
-  object-position:center 80%;
+  object-position:center 35%;
   opacity:1;
-  image-rendering:auto
+  image-rendering:auto;
+  transform:none;
+  will-change:auto;
+  backface-visibility:hidden
 }
 .hero-bg-mask{
   position:absolute;inset:0;
@@ -236,7 +245,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .hero-line1{font-size:clamp(2.45rem,4.8vw,3.45rem)}
   .hero-line2{font-size:clamp(2.15rem,4.1vw,3.05rem)}
   .hero-desc{font-size:1rem;max-width:520px}
-  .hero-bg-img{object-position:center 80%}
+  .hero-bg-img{object-position:center 32%}
   .hero-bg-mask{background:linear-gradient(180deg,rgba(0,0,0,.30) 0%,rgba(0,0,0,.10) 28%,rgba(0,0,0,.04) 52%,rgba(0,0,0,.58) 78%,rgba(0,0,0,.96) 100%)}
 }
 
