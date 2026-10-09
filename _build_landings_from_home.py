@@ -1549,6 +1549,11 @@ def clean_home(index: str) -> str:
         '{"@type":"ListItem","position":4,"name":"Contatti","item":"https://solomoncarassistance.it/#contatti"}',
         '{"@type":"ListItem","position":3,"name":"Contatti","item":"https://solomoncarassistance.it/#contatti"}',
     )
+    # Footer slim: P.IVA + REA doar in Privacy modal
+    index = index.replace(
+        "<p>&copy; 2026 Solomon Car Assistance di Solomon Eugeniu — P.IVA IT04659930988 — REA BS-631269 — Soccorso Stradale Brescia 24/7. Tutti i diritti riservati.</p>",
+        "<p>&copy; 2026 Solomon Car Assistance</p>",
+    )
     return index
 
 
