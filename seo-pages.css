@@ -1,21 +1,187 @@
+/* Solomon landings locali — mobile call-first (stesso DNA del sito) */
+.seo-page{padding-bottom:88px;background:#fff}
+.seo-page .header{position:sticky;top:0;z-index:100;background:rgba(7,26,69,.97);backdrop-filter:blur(8px);box-shadow:0 2px 16px rgba(0,0,0,.25)}
+.seo-page .header .logo-name,.seo-page .header .logo-sub{color:#fff}
+.seo-page .header .nav a{color:rgba(255,255,255,.92)}
+.seo-page .header-phone{display:inline-flex !important}
+.seo-page .header-phone .phone-text{display:inline !important;font-size:.72rem}
+@media(max-width:380px){
+  .seo-page .header-phone .phone-text{font-size:.65rem}
+}
 
-.seo-page .header-solid{position:sticky;top:0;background:#071a45;box-shadow:0 2px 12px rgba(0,0,0,.2)}
-.seo-page .header-solid .logo-name,.seo-page .header-solid .logo-sub,.seo-page .header-solid .nav a{color:#fff}
-.seo-main{padding:28px 0 64px}
-.seo-crumb{font-size:.9rem;color:#666;margin-bottom:14px}
-.seo-crumb a{color:#0a2560;text-decoration:underline}
-.seo-eyebrow{color:#cc0000;font-weight:700;font-size:.85rem;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
-.seo-main h1{font-size:clamp(1.6rem,4vw,2.2rem);line-height:1.2;color:#071a45;margin-bottom:12px}
-.seo-lead{font-size:1.05rem;color:#333;max-width:720px;margin-bottom:18px}
-.seo-cta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
-.seo-block{margin:28px 0;padding:22px;border:1px solid #e2e5ea;border-radius:14px;background:#fafbfc}
-.seo-block h2{font-size:1.2rem;color:#0a2560;margin-bottom:12px}
-.seo-bullets,.seo-towns,.seo-related{padding-left:18px;list-style:disc}
-.seo-bullets li,.seo-towns li,.seo-related li{margin:6px 0}
-.seo-related a{color:#0a2560;text-decoration:underline}
-.seo-page .faq-item{border-bottom:1px solid #e2e5ea;padding:10px 0}
-.seo-page .faq-item summary{cursor:pointer;font-weight:600;color:#071a45}
-.seo-page .faq-item p{margin-top:8px;color:#444}
-.footer{background:#071a45;color:#fff;padding:28px 0;margin-top:20px}
-.footer a{color:#ffb400}
-.footer-note{opacity:.75;font-size:.85rem;margin-top:8px}
+.seo-hero{
+  position:relative;
+  min-height:72vh;
+  display:flex;
+  align-items:flex-end;
+  color:#fff;
+  overflow:hidden;
+  background:#071a45;
+}
+.seo-hero-bg{
+  position:absolute;inset:0;
+  background:url("/carro-attrezzi-solomon-brescia-flotta-iveco-640.jpg") center top/cover no-repeat;
+  transform:scale(1.02);
+}
+@media(min-width:769px){
+  .seo-hero-bg{
+    background-image:url("/carro-attrezzi-solomon-brescia-flotta-iveco.jpg");
+    background-position:right top;
+  }
+}
+.seo-hero-mask{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(7,26,69,.35) 0%,rgba(7,26,69,.55) 40%,rgba(7,26,69,.92) 100%);
+}
+.seo-hero-inner{
+  position:relative;z-index:2;
+  width:100%;
+  padding:24px 16px 28px;
+  max-width:1140px;
+  margin:0 auto;
+}
+.seo-kicker{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:.72rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  color:#ffb400;margin-bottom:10px;
+}
+.seo-kicker i{width:8px;height:8px;border-radius:50%;background:#ffb400;box-shadow:0 0 10px #ffb400}
+.seo-hero h1{
+  font-size:clamp(1.55rem,6.2vw,2.35rem);
+  line-height:1.12;
+  font-weight:800;
+  letter-spacing:-.02em;
+  margin:0 0 12px;
+  text-shadow:0 2px 18px rgba(0,0,0,.35);
+}
+.seo-hero-lead{
+  font-size:1rem;
+  line-height:1.45;
+  color:rgba(255,255,255,.92);
+  max-width:34rem;
+  margin:0 0 18px;
+}
+.seo-hero-actions{
+  display:flex;flex-direction:column;gap:10px;
+}
+.seo-hero-actions .btn-hero-primary,
+.seo-hero-actions .btn-hero-wa{
+  width:100%;
+  min-height:52px;
+  font-size:.95rem;
+  justify-content:center;
+}
+.seo-phone-xl{
+  display:block;
+  margin-top:14px;
+  text-align:center;
+  font-size:1.35rem;
+  font-weight:800;
+  color:#ffb400;
+  letter-spacing:.02em;
+}
+.seo-phone-xl small{display:block;font-size:.75rem;font-weight:600;color:rgba(255,255,255,.7);margin-top:2px}
+
+@media(min-width:768px){
+  .seo-hero{min-height:58vh}
+  .seo-hero-inner{padding:40px 24px 44px}
+  .seo-hero-actions{flex-direction:row;flex-wrap:wrap}
+  .seo-hero-actions .btn-hero-primary,
+  .seo-hero-actions .btn-hero-wa{width:auto;min-width:220px}
+  .seo-phone-xl{text-align:left;font-size:1.5rem}
+}
+
+.seo-body{padding:28px 0 20px}
+.seo-crumb{font-size:.8rem;color:#777;margin-bottom:18px}
+.seo-crumb a{color:#0a2560}
+
+.seo-sec{margin:0 0 26px;padding:0}
+.seo-sec h2{
+  font-size:1.15rem;
+  color:#071a45;
+  margin:0 0 8px;
+  font-weight:800;
+}
+.seo-sec p{color:#333;line-height:1.55;margin:0 0 10px}
+.seo-check{list-style:none;padding:0;margin:12px 0 0}
+.seo-check li{
+  position:relative;
+  padding:8px 0 8px 28px;
+  border-bottom:1px solid #eef0f3;
+  color:#222;
+  font-size:.95rem;
+}
+.seo-check li::before{
+  content:"";
+  position:absolute;left:0;top:14px;
+  width:14px;height:14px;border-radius:50%;
+  background:#ffb400;
+  box-shadow:inset 0 0 0 3px #071a45;
+}
+
+.seo-mid-cta{
+  margin:28px 0;
+  padding:18px 16px;
+  border-radius:16px;
+  background:#071a45;
+  color:#fff;
+  text-align:center;
+}
+.seo-mid-cta p{margin:0 0 12px;font-weight:700;font-size:1.05rem}
+.seo-mid-cta .btn-hero-primary{width:100%;min-height:52px;justify-content:center}
+@media(min-width:600px){
+  .seo-mid-cta .btn-hero-primary{width:auto;min-width:260px}
+}
+
+.seo-faq details{
+  border:1px solid #e2e5ea;
+  border-radius:12px;
+  padding:12px 14px;
+  margin:0 0 10px;
+  background:#fafbfc;
+}
+.seo-faq summary{font-weight:700;color:#071a45;cursor:pointer}
+.seo-faq details p{margin:8px 0 0;color:#444}
+
+.seo-links{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px}
+.seo-links a{
+  display:block;
+  padding:12px 14px;
+  border-radius:12px;
+  background:#f4f6f8;
+  color:#0a2560;
+  font-weight:700;
+  font-size:.92rem;
+}
+@media(min-width:600px){
+  .seo-links{grid-template-columns:1fr 1fr}
+}
+
+.seo-page .footer{background:#071a45;color:#fff;padding:28px 0 100px;margin-top:10px}
+.seo-page .footer a{color:#ffb400}
+.seo-page .footer-note{opacity:.75;font-size:.82rem;margin-top:8px}
+
+/* Sticky call bar — sempre in basso su mobile */
+.seo-sticky{
+  position:fixed;left:0;right:0;bottom:0;z-index:200;
+  display:grid;grid-template-columns:1.15fr .85fr;
+  gap:0;
+  padding:0;
+  background:#fff;
+  box-shadow:0 -6px 24px rgba(0,0,0,.18);
+  border-top:1px solid #e8eaee;
+}
+.seo-sticky a{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  min-height:58px;
+  font-weight:800;
+  font-size:.95rem;
+  text-decoration:none;
+}
+.seo-sticky-call{background:#ffb400;color:#000}
+.seo-sticky-wa{background:#25d366;color:#fff}
+@media(min-width:900px){
+  .seo-sticky{display:none}
+  .seo-page{padding-bottom:0}
+  .seo-page .footer{padding-bottom:28px}
+}
