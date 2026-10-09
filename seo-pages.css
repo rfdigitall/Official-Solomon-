@@ -1,0 +1,21 @@
+
+.seo-page .header-solid{position:sticky;top:0;background:#071a45;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.seo-page .header-solid .logo-name,.seo-page .header-solid .logo-sub,.seo-page .header-solid .nav a{color:#fff}
+.seo-main{padding:28px 0 64px}
+.seo-crumb{font-size:.9rem;color:#666;margin-bottom:14px}
+.seo-crumb a{color:#0a2560;text-decoration:underline}
+.seo-eyebrow{color:#cc0000;font-weight:700;font-size:.85rem;letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
+.seo-main h1{font-size:clamp(1.6rem,4vw,2.2rem);line-height:1.2;color:#071a45;margin-bottom:12px}
+.seo-lead{font-size:1.05rem;color:#333;max-width:720px;margin-bottom:18px}
+.seo-cta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+.seo-block{margin:28px 0;padding:22px;border:1px solid #e2e5ea;border-radius:14px;background:#fafbfc}
+.seo-block h2{font-size:1.2rem;color:#0a2560;margin-bottom:12px}
+.seo-bullets,.seo-towns,.seo-related{padding-left:18px;list-style:disc}
+.seo-bullets li,.seo-towns li,.seo-related li{margin:6px 0}
+.seo-related a{color:#0a2560;text-decoration:underline}
+.seo-page .faq-item{border-bottom:1px solid #e2e5ea;padding:10px 0}
+.seo-page .faq-item summary{cursor:pointer;font-weight:600;color:#071a45}
+.seo-page .faq-item p{margin-top:8px;color:#444}
+.footer{background:#071a45;color:#fff;padding:28px 0;margin-top:20px}
+.footer a{color:#ffb400}
+.footer-note{opacity:.75;font-size:.85rem;margin-top:8px}
