@@ -1534,8 +1534,22 @@ def write_sitemap(slugs: list[str]) -> None:
 
 
 def clean_home(index: str) -> str:
-    """Togli lista SEO 'Pagine zona' — resta solo il blocco zone originale della home."""
-    return re.sub(r'\s*<div class="seo-hub-home"[^>]*>.*?</div>\s*', "\n", index, flags=re.S)
+    """Togli hub SEO + intera sezione ZONE (card) — non piace su nessuna pagina."""
+    index = re.sub(r'\s*<div class="seo-hub-home"[^>]*>.*?</div>\s*', "\n", index, flags=re.S)
+    index = re.sub(
+        r'\s*<!-- ZONE -->\s*<section class="section zone"[^>]*>.*?</section>\s*(?=<!-- GALLERIA)',
+        "\n\n",
+        index,
+        count=1,
+        flags=re.S,
+    )
+    index = index.replace('<li><a href="#zone">Zone</a></li>\n', "")
+    index = index.replace(
+        '{"@type":"ListItem","position":3,"name":"Zone","item":"https://solomoncarassistance.it/#zone"},'
+        '{"@type":"ListItem","position":4,"name":"Contatti","item":"https://solomoncarassistance.it/#contatti"}',
+        '{"@type":"ListItem","position":3,"name":"Contatti","item":"https://solomoncarassistance.it/#contatti"}',
+    )
+    return index
 
 
 def main() -> None:
