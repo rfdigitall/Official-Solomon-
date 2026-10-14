@@ -500,4 +500,31 @@
     }
   }
 
+  /* ══ Google Ads — Click tel sito (conversione PRIMARY) ══ */
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    if (!href || typeof gtag !== 'function') return;
+    e.preventDefault();
+    var navigated = false;
+    function go() {
+      if (navigated) return;
+      navigated = true;
+      window.location.href = href;
+    }
+    try {
+      gtag('event', 'conversion', {
+        send_to: 'AW-17595249435/UkjqCJGG85wdEJvmiMZB',
+        value: 1.0,
+        currency: 'EUR',
+        event_callback: go
+      });
+    } catch (err) {
+      go();
+      return;
+    }
+    setTimeout(go, 900);
+  }, true);
+
 })();
