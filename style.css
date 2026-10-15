@@ -1,4 +1,4 @@
-/* v192916 */
+/* v20261015notice */
 /* Solomon Car Assistance – Final v4 Mobile-First */
 :root{
   --yellow:#ffb400;--yellow-glow:rgba(255,180,0,.4);--yellow-hover:#ffc233;
@@ -7,9 +7,29 @@
   --black:#000;--white:#fff;
   --gray:#555;--gray-light:#888;--gray-bg:#f4f6f8;--border:#e2e5ea;
   --wa:#25d366;--wa-dark:#1ebe57;
-  --header-h:68px;--max-w:1140px;
+  --notice-h:32px;--header-h:68px;--max-w:1140px;
+  --top-stack:calc(var(--notice-h) + var(--header-h));
   --radius:10px;--radius-lg:14px;
   --transition:.22s ease;
+}
+/* Thin top notice — mobile-first, like trust strip */
+.top-notice{
+  position:fixed;top:0;left:0;right:0;z-index:110;
+  height:var(--notice-h);min-height:var(--notice-h);
+  display:flex;align-items:center;justify-content:center;
+  padding:0 14px;
+  background:linear-gradient(180deg,#121212 0%,#0a0a0a 100%);
+  border-bottom:1px solid rgba(255,180,0,.28);
+  font-size:0.7rem;font-weight:600;letter-spacing:.015em;
+  color:rgba(255,255,255,.82);text-align:center;line-height:1.2;
+  -webkit-font-smoothing:antialiased;
+}
+.top-notice span{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-notice strong{color:var(--yellow);font-weight:800}
+@media (max-width:380px){
+  :root{--notice-h:36px}
+  .top-notice{font-size:0.65rem;padding:0 10px}
+  .top-notice span{white-space:normal}
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
@@ -86,7 +106,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 
 /* ═══════════════ HEADER ═══════════════ */
 .header{
-  position:fixed;top:0;left:0;right:0;z-index:100;height:var(--header-h);
+  position:fixed;top:var(--notice-h);left:0;right:0;z-index:100;height:var(--header-h);
   background:rgba(0,0,0,.15);
   backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
@@ -191,7 +211,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   width:100%;padding:0
 }
 .hero-top{
-  padding:calc(var(--header-h) + 10px) 18px 0;
+  padding:calc(var(--top-stack) + 10px) 18px 0;
   position:relative;z-index:2
 }
 .hero-bottom{
@@ -240,7 +260,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 /* ── TABLET 768px ── */
 @media(min-width:768px){
   .hero-grid{justify-content:flex-end}
-  .hero-top{padding:calc(var(--header-h) + 16px) 40px 0}
+  .hero-top{padding:calc(var(--top-stack) + 16px) 40px 0}
   .hero-bottom{padding:0 40px 40px}
   .hero-line1{font-size:clamp(2.45rem,4.8vw,3.45rem)}
   .hero-line2{font-size:clamp(2.15rem,4.1vw,3.05rem)}
@@ -280,7 +300,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
     flex-direction:row;
     align-items:center;
     justify-content:flex-start;
-    padding-top:var(--header-h)
+    padding-top:var(--top-stack)
   }
   .hero-top{display:none}
   .hero-bottom{
