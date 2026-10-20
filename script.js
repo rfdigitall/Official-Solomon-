@@ -500,7 +500,8 @@
     }
   }
 
-  /* ══ Google Ads — Click tel sito (conversione PRIMARY) ══ */
+  /* ══ Google Ads — Click telefono sito PRIMARY (rebuild 20/10) ══ */
+  /* send_to: AW-17595249435/KzcQCPu_raMdEJvmiMZB — conv 7858774011 */
   document.addEventListener('click', function (e) {
     var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
     if (!a) return;
@@ -515,7 +516,7 @@
     }
     try {
       gtag('event', 'conversion', {
-        send_to: 'AW-17595249435/UkjqCJGG85wdEJvmiMZB',
+        send_to: 'AW-17595249435/KzcQCPu_raMdEJvmiMZB',
         value: 1.0,
         currency: 'EUR',
         event_callback: go
