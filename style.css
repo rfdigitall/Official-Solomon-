@@ -801,3 +801,5 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .cookie-no{padding:9px 22px;background:transparent;color:var(--white);font-family:inherit;font-size:.82rem;font-weight:700;border:2px solid var(--yellow);border-radius:6px;cursor:pointer;transition:background .2s}
 .cookie-no:hover{background:rgba(255,180,0,.15)}
 .cookie-banner[hidden]{display:none}
+
+.cookie-banner{padding:10px 14px}.cookie-inner p{font-size:.78rem;line-height:1.4}

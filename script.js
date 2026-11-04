@@ -50,7 +50,7 @@
 
   const storedConsent = readConsent();
   if (storedConsent === 'granted') loadAds();
-  else if (storedConsent === null && cookieBanner) setTimeout(() => { cookieBanner.hidden = false; }, 800);
+  else if (storedConsent === null && cookieBanner) cookieBanner.hidden = false;
 
   if (cookieOk) cookieOk.addEventListener('click', () => { saveConsent('granted'); if (cookieBanner) cookieBanner.hidden = true; loadAds(); });
   if (cookieNo) cookieNo.addEventListener('click', () => { saveConsent('denied'); if (cookieBanner) cookieBanner.hidden = true; });
