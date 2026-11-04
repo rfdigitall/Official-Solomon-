@@ -6,21 +6,54 @@
   let leafletLoader = null;
 
 
-  /* ══ Cookie Banner ══ */
+  /* ══ Consenso cookie + Google Ads (Consent Mode v2) ══
+     Nessuno script Google viene caricato prima di "Accetta". */
+  const ADS = { id: 'AW-17595249435', tel: 'KzcQCPu_raMdEJvmiMZB', wa: 'nGO6CPXKjLIdEJvmiMZB' };
+  const CONSENT_KEY = 'cookie_consent';
+  const CONSENT_TTL = 180 * 24 * 60 * 60 * 1000; // 6 mesi
+  let adsLoaded = false;
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { window.dataLayer.push(arguments); }
+  window.gtag = window.gtag || gtag;
+
+  function readConsent() {
+    try {
+      const v = JSON.parse(localStorage.getItem(CONSENT_KEY) || 'null');
+      if (v && (v.s === 'granted' || v.s === 'denied') && Date.now() - v.t < CONSENT_TTL) return v.s;
+    } catch (e) {}
+    return null;
+  }
+  function saveConsent(state) {
+    try { localStorage.setItem(CONSENT_KEY, JSON.stringify({ s: state, t: Date.now() })); } catch (e) {}
+  }
+  function loadAds() {
+    if (adsLoaded) return;
+    adsLoaded = true;
+    gtag('consent', 'default', { ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'denied', analytics_storage: 'denied' });
+    const sc = document.createElement('script');
+    sc.async = true;
+    sc.src = 'https://www.googletagmanager.com/gtag/js?id=' + ADS.id;
+    document.head.appendChild(sc);
+    gtag('js', new Date());
+    gtag('config', ADS.id, { allow_ad_personalization_signals: false });
+  }
+
   const cookieBanner = document.getElementById('cookieBanner');
   const cookieOk = document.getElementById('cookieOk');
-  if (cookieBanner && cookieOk) {
-    try {
-      if (!localStorage.getItem('cookie_ok')) {
-        // Small delay so page loads first
-        setTimeout(() => { cookieBanner.hidden = false; }, 800);
-      }
-    } catch(e) { setTimeout(() => { cookieBanner.hidden = false; }, 800); }
-    cookieOk.addEventListener('click', () => {
-      cookieBanner.hidden = true;
-      try { localStorage.setItem('cookie_ok', '1'); } catch(e) {}
-    });
-  }
+  const cookieNo = document.getElementById('cookieNo');
+  const cookieInfo = document.getElementById('cookieInfo');
+  const cookieManage = document.getElementById('cookieManage');
+  const privacyModalEl = document.getElementById('privacyModal');
+  if (cookieInfo) cookieInfo.addEventListener('click', e => { e.preventDefault(); if (privacyModalEl) privacyModalEl.hidden = false; });
+  if (cookieManage) cookieManage.addEventListener('click', e => { e.preventDefault(); if (cookieBanner) cookieBanner.hidden = false; });
+
+  const storedConsent = readConsent();
+  if (storedConsent === 'granted') loadAds();
+  else if (storedConsent === null && cookieBanner) setTimeout(() => { cookieBanner.hidden = false; }, 800);
+
+  if (cookieOk) cookieOk.addEventListener('click', () => { saveConsent('granted'); if (cookieBanner) cookieBanner.hidden = true; loadAds(); });
+  if (cookieNo) cookieNo.addEventListener('click', () => { saveConsent('denied'); if (cookieBanner) cookieBanner.hidden = true; });
 
 
   /* ══ Hero Geo Card ══ */
@@ -500,32 +533,22 @@
     }
   }
 
-  /* ══ Google Ads — Click telefono sito PRIMARY (rebuild 20/10) ══ */
-  /* send_to: AW-17595249435/KzcQCPu_raMdEJvmiMZB — conv 7858774011 */
+  /* ══ Google Ads — conversioni: clic telefono e WhatsApp (solo con consenso) ══ */
   document.addEventListener('click', function (e) {
-    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
-    if (!a) return;
-    var href = a.getAttribute('href') || '';
-    if (!href || typeof gtag !== 'function') return;
-    e.preventDefault();
-    var navigated = false;
-    function go() {
-      if (navigated) return;
-      navigated = true;
-      window.location.href = href;
+    var el = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!el || !adsLoaded) return;
+    var href = el.getAttribute('href') || '';
+    if (href.indexOf('tel:') === 0) {
+      e.preventDefault();
+      var navigated = false;
+      var go = function () { if (navigated) return; navigated = true; window.location.href = href; };
+      try {
+        gtag('event', 'conversion', { send_to: ADS.id + '/' + ADS.tel, value: 1.0, currency: 'EUR', event_callback: go });
+      } catch (err) { go(); return; }
+      setTimeout(go, 700);
+    } else if (href.indexOf('wa.me') !== -1 || href.indexOf('api.whatsapp.com') !== -1) {
+      try { gtag('event', 'conversion', { send_to: ADS.id + '/' + ADS.wa, value: 1.0, currency: 'EUR' }); } catch (err) {}
     }
-    try {
-      gtag('event', 'conversion', {
-        send_to: 'AW-17595249435/KzcQCPu_raMdEJvmiMZB',
-        value: 1.0,
-        currency: 'EUR',
-        event_callback: go
-      });
-    } catch (err) {
-      go();
-      return;
-    }
-    setTimeout(go, 900);
   }, true);
 
 })();
