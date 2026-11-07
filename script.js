@@ -7,7 +7,7 @@
 
 
   /* ══ Consenso cookie + Google Ads (Consent Mode v2) ══
-     Nessuno script Google viene caricato prima di "Accetta". */
+     Cookie Google Ads solo dopo "Accetta"; senza consenso solo ping anonimo. */
   const ADS = { id: 'AW-17595249435', tel: 'KzcQCPu_raMdEJvmiMZB', wa: 'nGO6CPXKjLIdEJvmiMZB' };
   const CONSENT_KEY = 'cookie_consent';
   const CONSENT_TTL = 180 * 24 * 60 * 60 * 1000; // 6 mesi
@@ -27,10 +27,16 @@
   function saveConsent(state) {
     try { localStorage.setItem(CONSENT_KEY, JSON.stringify({ s: state, t: Date.now() })); } catch (e) {}
   }
+  function updateConsent(state) {
+    gtag('consent', 'update', { ad_storage: state, ad_user_data: state, ad_personalization: 'denied', analytics_storage: 'denied' });
+  }
+  /* Consent Mode v2 (advanced): il tag parte sempre con tutto "denied" (nessun cookie, solo ping anonimo
+     per il conteggio); passa a "granted" solo dopo "Accetta" o se la scelta salvata e' valida. */
   function loadAds() {
     if (adsLoaded) return;
     adsLoaded = true;
-    gtag('consent', 'default', { ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'denied', analytics_storage: 'denied' });
+    gtag('consent', 'default', { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' });
+    if (readConsent() === 'granted') updateConsent('granted');
     const sc = document.createElement('script');
     sc.async = true;
     sc.src = 'https://www.googletagmanager.com/gtag/js?id=' + ADS.id;
@@ -48,12 +54,11 @@
   if (cookieInfo) cookieInfo.addEventListener('click', e => { e.preventDefault(); if (privacyModalEl) privacyModalEl.hidden = false; });
   if (cookieManage) cookieManage.addEventListener('click', e => { e.preventDefault(); if (cookieBanner) cookieBanner.hidden = false; });
 
-  const storedConsent = readConsent();
-  if (storedConsent === 'granted') loadAds();
-  else if (storedConsent === null && cookieBanner) cookieBanner.hidden = false;
+  loadAds();
+  if (readConsent() === null && cookieBanner) cookieBanner.hidden = false;
 
-  if (cookieOk) cookieOk.addEventListener('click', () => { saveConsent('granted'); if (cookieBanner) cookieBanner.hidden = true; loadAds(); });
-  if (cookieNo) cookieNo.addEventListener('click', () => { saveConsent('denied'); if (cookieBanner) cookieBanner.hidden = true; });
+  if (cookieOk) cookieOk.addEventListener('click', () => { saveConsent('granted'); if (cookieBanner) cookieBanner.hidden = true; updateConsent('granted'); });
+  if (cookieNo) cookieNo.addEventListener('click', () => { saveConsent('denied'); if (cookieBanner) cookieBanner.hidden = true; updateConsent('denied'); });
 
 
   /* ══ Hero Geo Card ══ */
